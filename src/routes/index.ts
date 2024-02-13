@@ -2,7 +2,9 @@
  * Main application routes
  */
 import express from "express";
-import resourceRouter from "./_router";
+import albumRoutes from "./albums";
+import photoRoutes from "./photos";
+import profileRoutes from "./profile"
 const router = express.Router();
 
 /**
@@ -18,6 +20,14 @@ router.get("/", (req, res) => {
  * [EXAMPLE] /resource
  */
 // router.use('/resource', resourceRouter);
+router.use("/albums, albumRoutes ")
+
+router.use("/photos, ")
+
+router.use("/profile, ")
+
+
+
 
 /**
  * Catch-all route handler
