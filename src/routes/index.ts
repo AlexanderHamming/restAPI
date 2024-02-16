@@ -3,8 +3,8 @@
  */
 import express from "express";
 import albumRoutes from "./albums";
-import photoRoutes from "./photos";
-import profileRoutes from "./profile"
+import photosRoutes from "./photos";
+import profileRoutes from "./profile";
 const router = express.Router();
 
 /**
@@ -20,11 +20,18 @@ router.get("/", (req, res) => {
  * [EXAMPLE] /resource
  */
 // router.use('/resource', resourceRouter);
-router.use("/albums, albumRoutes ")
+router.use("/albums", albumRoutes )
 
-router.use("/photos, ")
 
-router.use("/profile, ")
+router.use("/photos", photosRoutes)
+
+
+router.use("/profile", profileRoutes)
+
+
+router.post("login",)
+
+router.post("register",)
 
 
 
