@@ -21,3 +21,5 @@ export const patchUser = async (userId: number, data: updateUser) => {
 		data,
 	});
 }
+
+
