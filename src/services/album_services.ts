@@ -32,7 +32,7 @@ return await prisma.album.findUniqueOrThrow({
 });
 }
 
-export const patchAlbum = async (albumId: number, data: updateAlbum ) => {
+export const patchAlbum = async ({albumId, data}: { albumId: number; data: updateAlbum } ) => {
 	return prisma.album.update({
 		where: {
 			id: albumId,

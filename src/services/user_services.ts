@@ -22,4 +22,13 @@ export const patchUser = async (userId: number, data: updateUser) => {
 	});
 }
 
+export const getUserByEmail = async (email: string) => {
+    return await prisma.user.findFirst({
+        where: {
+            email: { equals: email },
+        },
+    });
+}
+
+
 
