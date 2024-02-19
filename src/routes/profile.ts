@@ -1,6 +1,7 @@
 
 import express from "express";
 import { index, show, store, update, destroy } from "../controllers/_controller";
+import { getProfile } from "../controllers/profile_controller";
 const router = express.Router();
 
 /**
@@ -8,7 +9,7 @@ const router = express.Router();
  *
  * Get all resources
  */
-router.get("/", index);
+router.get("/", getProfile);
 
 /**
  * GET /resources/:resourceId

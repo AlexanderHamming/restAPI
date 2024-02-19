@@ -7,10 +7,11 @@ import { extractValidateHeader } from "./auth_helper";
 
 
 
-const debug = Debug("prisma-books:basic");
+const debug = Debug("auth-basic");
+debug.enabled = true;
 
 export const basic = async (req: Request, res: Response, next: NextFunction) => {
-	debug("Hello from auth/basic!");
+	console.log("Hello from basic middleware");
 
 	let base64Payload: string;
 
@@ -40,6 +41,7 @@ export const basic = async (req: Request, res: Response, next: NextFunction) => 
 
 
 	const user = await getUserByEmail(email);
+	console.log("User from database:", user);
 	if (!user) {
 		debug("User %s does not exist", email);
 		return res.status(401).send({ status: "fail", message: "Authorization required" });
@@ -53,7 +55,7 @@ export const basic = async (req: Request, res: Response, next: NextFunction) => 
 		return res.status(401).send({ status: "fail", message: "Authorization required" });
 	}
 
-	debug("Password for user %s was correct 🥳", email);
+	debug("Password for user %s was correct", email);
 
 
 	(req as any).user = user;

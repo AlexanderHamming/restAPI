@@ -8,6 +8,7 @@ import profileRoutes from "./profile";
 import { createUserRules } from "../validations/user_rules";
 import { register } from "../controllers/user_controller";
 import { basic } from "../middlewares/auth/basic";
+import validateRequest from "../middlewares/validate_req";
 const router = express.Router();
 
 /**
@@ -15,7 +16,7 @@ const router = express.Router();
  */
 router.get("/", (req, res) => {
 	res.send({
-		message: "But first, let me take a selfie 🤳 https://www.youtube.com/watch?v=kdemFfbS5H0",
+		message: "Welcome mate",
 	});
 });
 
@@ -30,7 +31,7 @@ router.use("/profile", profileRoutes)
 
 router.post("login", )
 
-router.post("register", createUserRules, basic, register )
+router.post("/register", createUserRules, validateRequest, register )
 
 
 

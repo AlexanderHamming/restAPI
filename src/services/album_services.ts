@@ -4,18 +4,20 @@ import { createAlbum, updateAlbum, albumId } from "../types/album_types";
 
 
 export const CreateAlbum = async (userId:  number, data: createAlbum ) => {
+	console.log("userId before create:", userId);
 	return await prisma.album.create({
 		data: {
 			...data,
 			userId,
 		},
 	});
+
 }
 
 export const GetAlbums = async (userId: number) => {
 return await prisma.album.findMany({
     where: {
-      userId,
+      userId: userId
     },
   });
 }
@@ -23,8 +25,8 @@ return await prisma.album.findMany({
 export const GetAlbum = async (userId: number, albumId: number) => {
 return await prisma.album.findUniqueOrThrow({
 	where: {
-		id: albumId,
 		userId,
+      id: albumId,
 	},
 	include: {
 		photos: true
