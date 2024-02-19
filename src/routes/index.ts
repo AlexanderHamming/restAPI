@@ -5,6 +5,9 @@ import express from "express";
 import albumRoutes from "./albums";
 import photosRoutes from "./photos";
 import profileRoutes from "./profile";
+import { createUserRules } from "../validations/user_rules";
+import { register } from "../controllers/user_controller";
+import { basic } from "../middlewares/auth/basic";
 const router = express.Router();
 
 /**
@@ -16,10 +19,6 @@ router.get("/", (req, res) => {
 	});
 });
 
-/**
- * [EXAMPLE] /resource
- */
-// router.use('/resource', resourceRouter);
 router.use("/albums", albumRoutes )
 
 
@@ -29,9 +28,9 @@ router.use("/photos", photosRoutes)
 router.use("/profile", profileRoutes)
 
 
-router.post("login",)
+router.post("login", )
 
-router.post("register",)
+router.post("register", createUserRules, basic, register )
 
 
 

@@ -10,7 +10,7 @@ import { extractValidateHeader } from "./auth_helper";
 const debug = Debug("prisma-books:basic");
 
 export const basic = async (req: Request, res: Response, next: NextFunction) => {
-	debug("Hello from auth/basic! 🙋🏽");
+	debug("Hello from auth/basic!");
 
 	let base64Payload: string;
 

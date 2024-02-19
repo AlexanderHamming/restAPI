@@ -1,6 +1,8 @@
 
 import express from "express";
 import { index, show, store, update, destroy } from "../controllers/_controller";
+import { createPhotoRules, updatePhotoRules } from "../validations/photos_rules";
+import validateRequest from "../middlewares/validate_req";
 const router = express.Router();
 
 /**
@@ -22,13 +24,13 @@ router.get("/:photoId", show);
  *
  * Create a resource
  */
-router.post("/", store);
+router.post("/", createPhotoRules, validateRequest, store);
 
 /**
  * PATCH /resources/:resourceId
  *
  * Update a resource
  */
-router.patch("/:photoId", update);
+router.patch("/:photoId", updatePhotoRules, validateRequest, update);
 
 export default router;
