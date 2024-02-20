@@ -1,5 +1,5 @@
 import prisma from "../prisma";
-import { createPhoto, updatePhoto, photoId } from "../types/photo_types";
+import { createPhoto, updatePhoto } from "../types/photo_types";
 
 
 export const CreatePhoto = async (userId: number, data: createPhoto) => {

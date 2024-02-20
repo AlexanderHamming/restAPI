@@ -1,5 +1,5 @@
 import prisma from "../prisma";
-import { createAlbum, updateAlbum, albumId } from "../types/album_types";
+import { createAlbum, updateAlbum } from "../types/album_types";
 
 
 

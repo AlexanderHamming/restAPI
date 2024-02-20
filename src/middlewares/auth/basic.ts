@@ -11,7 +11,6 @@ const debug = Debug("auth-basic");
 debug.enabled = true;
 
 export const basic = async (req: Request, res: Response, next: NextFunction) => {
-	console.log("Hello from basic middleware");
 
 	let base64Payload: string;
 
@@ -41,7 +40,6 @@ export const basic = async (req: Request, res: Response, next: NextFunction) => 
 
 
 	const user = await getUserByEmail(email);
-	console.log("User from database:", user);
 	if (!user) {
 		debug("User %s does not exist", email);
 		return res.status(401).send({ status: "fail", message: "Authorization required" });

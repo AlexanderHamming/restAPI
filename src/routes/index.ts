@@ -12,9 +12,7 @@ import { getProfile } from "../controllers/profile_controller";
 import { addPhotoToAlbum } from "../controllers/album_controller";
 const router = express.Router();
 
-/**
- * GET /
- */
+
 router.get("/", (req, res) => {
 	res.send({
 		message: "Welcome mate",
@@ -25,6 +23,8 @@ router.use("/albums", albumRoutes )
 
 
 router.use("/photos", photosRoutes)
+
+
 
 
 router.get("/profile", basic, getProfile)

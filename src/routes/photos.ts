@@ -1,4 +1,3 @@
-
 import express from "express";
 import { index, show, store, update } from "../controllers/photo_controller";
 import { createPhotoRules, updatePhotoRules } from "../validations/photos_rules";
