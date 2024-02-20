@@ -1,5 +1,5 @@
 import prisma from "../prisma";
-import { createUser, updateUser, userId } from "../types/user_types";
+import { createUser, userId } from "../types/user_types";
 
 export const CreateUser = async (data: createUser) => {
 	return await prisma.user.create({
@@ -8,19 +8,6 @@ export const CreateUser = async (data: createUser) => {
 }
 
 
-export const GetUserInfo = async (userId: number) => {
-	return prisma.user.findUnique({
-		where: { id: userId}
-	})
-}
-
-
-export const patchUser = async (userId: number, data: updateUser) => {
-	return await prisma.user.update({
-		where: { id: userId },
-		data,
-	});
-}
 
 export const getUserByEmail = async (email: string) => {
     return await prisma.user.findFirst({
@@ -31,11 +18,15 @@ export const getUserByEmail = async (email: string) => {
 }
 
 
-export const getUserById = async (id: number) => {
+export const getUserById = async (userId: number) => {
 	return await prisma.user.findUnique({
-		where: {
-			id,
-		},
+		where: { id: userId },
+		select: {
+			id: true,
+			email: true,
+			first_name: true,
+			last_name: true
+		}
 	})
 }
 

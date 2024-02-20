@@ -1,17 +1,19 @@
 import {Request, Response} from "express"
-import Debug from "debug"
 import { CreatePhoto,GetPhoto, GetPhotos,patchPhoto } from "../services/photos_services"
 import { createPhoto,updatePhoto } from "../types/photo_types"
 import { matchedData, validationResult } from "express-validator"
 
 export const index = async (req: Request, res: Response) => {
 
-	const {userId} = req.params;
-
 	try {
+		if (!req.user) {
+		  return res.status(401).send({ status: 'fail', message: 'Authorization required' });
+		}
+		const userId = req.user.id;
+		const photos = await GetPhotos(userId);
 
-		const photos = await GetPhotos(Number(userId));
-		res.send({Status: "Succes", Data: photos });
+
+		res.send({ Status: 'Success', Data: photos });
 
 	} catch (err) {
 		console.error(err)
@@ -22,14 +24,23 @@ export const index = async (req: Request, res: Response) => {
 
 export const show = async (req: Request, res: Response) => {
 
-	const {userId, albumId} = req.params;
-
 	try {
+		if (!req.user) {
+		  return res.status(401).send({ status: 'fail', message: 'Authorization required' });
+		}
+		const { photoId } = req.params;
+		const userId = req.user.id;
 
-		const photo = await GetPhoto(Number(userId), Number(albumId));
 
-	res.send({Status: "Succes", Data: photo });
+		const photo = await GetPhoto(Number(userId), Number(photoId));
+		const adjustedPhoto = {
+			id: photo.id,
+            title: photo.title,
+			url: photo.url,
+            comment: photo.title
+        };
 
+		res.send({ Status: 'Success', Data: adjustedPhoto });
 	} catch (err: any) {
 		if (err.code === "P2025") {
 			res.status(404).send({ status: "error", message: "Photo Not Found" });
@@ -43,12 +54,16 @@ export const show = async (req: Request, res: Response) => {
 
 
 export const store = async (req: Request, res: Response) => {
-
+	console.log('Incoming request data:', req.body);
 	const validatedData = matchedData(req) as createPhoto;
 
 	try {
+        const userId = req.user?.id;
 
-        const userId = validatedData.userId;
+        if (!userId) {
+            return res.status(401).send({ status: 'fail', message: 'User ID is undefined' });
+        }
+
 		const photo = await CreatePhoto(userId, validatedData)
 		res.status(201).send({Status: "Success", data: photo})
 	} catch (err) {
@@ -63,11 +78,12 @@ export const store = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
 
-	const { userId, photoId } = req.params;
-	try {
-	  const validatedData = matchedData(req) as updatePhoto;
+	const validatedData = matchedData(req) as updatePhoto;
 
-	  const updatedPhoto = await patchPhoto(Number(userId), Number(photoId), validatedData);
+	try {
+		const { photoId } = req.params;
+		const userId = req.user?.id;
+	  const updatedPhoto = await patchPhoto({ photoId: Number(photoId), data: validatedData });
 
 	  if (updatedPhoto) {
 		res.send({ Status: "Success", data: updatedPhoto });

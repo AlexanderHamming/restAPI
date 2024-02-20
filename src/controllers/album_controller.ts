@@ -102,19 +102,20 @@ export const update = async (req: Request, res: Response) => {
 
 export const addPhotoToAlbum = async (req: Request, res: Response) => {
 
-	const {albumId, photoId} = req.params
+	const { albumId } = req.params;
+	const { id: photoId } = req.body;
 
 	try {
 
 		const addedPhoto = await photoToAlbum(Number(albumId), Number(photoId))
 
 		if(addedPhoto) {
-			res.send({ Status: "Succes", data: addedPhoto });
+			res.send({ Status: "Succes", data: null });
 		} else {
 			res.status(404).send({Status: "Error", Message: "Album not found"});
 		}
 	} catch (err) {
 		console.error(err);
-		res.status(500).send({ Status: "Error", Message: "Failed to update album" });
+		res.status(500).send({ Status: "Error", Message: "Failed to add photo to album" });
 	  }
 	};

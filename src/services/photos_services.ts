@@ -28,14 +28,13 @@ return await prisma.photo.findUniqueOrThrow({
 });
 }
 
-export const patchPhoto = async (userId: number, photoId: number, data: updatePhoto ) => {
+export const patchPhoto = async ({ photoId, data }: { photoId: number; data: updatePhoto }) => {
 	return prisma.photo.update({
 		where: {
 			id: photoId,
-			userId,
 		},
 		data,
-	});
+	})
 }
 
 

@@ -4,4 +4,4 @@ export type userId = Pick<User, "id">
 
 export type createUser = Omit<User, "id">
 
-export type updateUser = Partial<createUser>
+

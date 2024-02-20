@@ -4,11 +4,12 @@
 import express from "express";
 import albumRoutes from "./albums";
 import photosRoutes from "./photos";
-import profileRoutes from "./profile";
 import { createUserRules } from "../validations/user_rules";
 import { register } from "../controllers/user_controller";
 import { basic } from "../middlewares/auth/basic";
 import validateRequest from "../middlewares/validate_req";
+import { getProfile } from "../controllers/profile_controller";
+import { addPhotoToAlbum } from "../controllers/album_controller";
 const router = express.Router();
 
 /**
@@ -26,10 +27,11 @@ router.use("/albums", albumRoutes )
 router.use("/photos", photosRoutes)
 
 
-router.use("/profile", profileRoutes)
+router.get("/profile", basic, getProfile)
 
 
-router.post("login", )
+router.post("/albums/:albumId/photos", basic, validateRequest, addPhotoToAlbum);
+
 
 router.post("/register", createUserRules, validateRequest, register )
 
