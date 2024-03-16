@@ -95,7 +95,7 @@ export const update = async (req: Request, res: Response) => {
 
 	try {
 		const { photoId } = req.params;
-        const userId = req.user?.id;
+        const userId = (req as any).user?.id;
 
 		if (!userId) {
 			return res.status(401).send({ status: "fail", message: "Authorization required" });

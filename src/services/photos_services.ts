@@ -48,7 +48,7 @@ export const patchPhoto = async ({
         throw new Error("You are not authorized to update this album");
     }
 
-	return prisma.album.update({
+	return prisma.photo.update({
         where: { id: photoId },
         data,
     });
