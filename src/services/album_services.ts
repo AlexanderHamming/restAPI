@@ -32,27 +32,55 @@ export const GetAlbum = async (userId: number, albumId: number) => {
 };
 
 export const patchAlbum = async ({
-	albumId,
-	data,
+    userId,
+    albumId,
+    data,
 }: {
-	albumId: number;
-	data: updateAlbum;
+    userId: number;
+    albumId: number;
+    data: updateAlbum;
 }) => {
+
+    const album = await prisma.album.findUnique({
+        where: { id: albumId },
+        include: { user: true },
+    });
+	if (!album) {
+        throw new Error("Album not found");
+    }
+
+	if (album.user.id !== userId) {
+        throw new Error("You are not authorized to update this album");
+    }
+
 	return prisma.album.update({
-		where: {
-			id: albumId,
-		},
-		data,
-	});
+        where: { id: albumId },
+        data,
+    });
 };
 
-export const photoToAlbum = async (albumId: number, photoId: number) => {
-	return prisma.album.update({
-		where: { id: albumId },
-		data: {
-			photos: {
-				connect: { id: photoId },
-			},
-		},
-	});
+
+
+export const photoToAlbum = async (userId: number, albumId: number, photoId: number) => {
+    const album = await prisma.album.findUnique({
+        where: { id: albumId },
+        include: { user: true },
+    });
+
+    if (!album) {
+        throw new Error("Album not found");
+    }
+
+    if (album.user.id !== userId) {
+        throw new Error("You are not authorized to add photos to this album");
+    }
+
+    return prisma.album.update({
+        where: { id: albumId },
+        data: {
+            photos: {
+                connect: { id: photoId },
+            },
+        },
+    });
 };
