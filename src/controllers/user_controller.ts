@@ -14,10 +14,10 @@ export const register = async (req: Request, res: Response) => {
 
 		const user = await CreateUser(validatedData);
 
-		res.status(201).send({ Status: "Sucess", Data: user });
+		res.status(201).send({ status: "success", data: user });
 	} catch (err: any) {
 		res.status(500).send({
-			Status: "Error",
+			status: "error",
 			message: "Couldn't create the user",
 		});
 	}

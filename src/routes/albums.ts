@@ -25,7 +25,7 @@ router.get("/:albumId", basic, show);
  *
  * Create a resource
  */
-router.post("/", createAlbumRules, basic, validateRequest , store);
+router.post("/", createAlbumRules, basic, validateRequest, store);
 
 /**
  * PATCH /resources/:resourceId
@@ -33,6 +33,5 @@ router.post("/", createAlbumRules, basic, validateRequest , store);
  * Update a resource
  */
 router.patch("/:albumId", patchAlbumRules, basic, validateRequest, update);
-
 
 export default router;

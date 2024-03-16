@@ -1,10 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 
-
 const checkValidation = (req: Request, res: Response, next: NextFunction) => {
 	const validationErrors = validationResult(req);
-
 
 	if (!validationErrors.isEmpty()) {
 		res.status(400).send({
@@ -14,7 +12,7 @@ const checkValidation = (req: Request, res: Response, next: NextFunction) => {
 		return;
 	}
 
-    next();
-}
+	next();
+};
 
 export default checkValidation;

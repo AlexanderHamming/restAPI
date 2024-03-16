@@ -12,31 +12,21 @@ import { getProfile } from "../controllers/profile_controller";
 import { addPhotoToAlbum } from "../controllers/album_controller";
 const router = express.Router();
 
-
 router.get("/", (req, res) => {
 	res.send({
 		message: "Welcome mate",
 	});
 });
 
-router.use("/albums", albumRoutes )
+router.use("/albums", albumRoutes);
 
+router.use("/photos", photosRoutes);
 
-router.use("/photos", photosRoutes)
-
-
-
-
-router.get("/profile", basic, getProfile)
-
+router.get("/profile", basic, getProfile);
 
 router.post("/albums/:albumId/photos", basic, validateRequest, addPhotoToAlbum);
 
-
-router.post("/register", createUserRules, validateRequest, register )
-
-
-
+router.post("/register", createUserRules, validateRequest, register);
 
 /**
  * Catch-all route handler

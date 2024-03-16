@@ -18,7 +18,7 @@ export const index = async (req: Request, res: Response) => {
 		const userId = req.user.id;
 		const photos = await GetPhotos(userId);
 
-		res.send({ Status: "Success", Data: photos });
+		res.send({ status: "success", data: photos });
 	} catch (err) {
 		console.error(err);
 		res.status(500).send({
@@ -47,7 +47,7 @@ export const show = async (req: Request, res: Response) => {
 			comment: photo.title,
 		};
 
-		res.send({ Status: "Success", Data: adjustedPhoto });
+		res.send({ status: "success", data: adjustedPhoto });
 	} catch (err: any) {
 		if (err.code === "P2025") {
 			res.status(404).send({
@@ -79,7 +79,7 @@ export const store = async (req: Request, res: Response) => {
 		}
 
 		const photo = await CreatePhoto(userId, validatedData);
-		res.status(201).send({ Status: "Success", data: photo });
+		res.status(201).send({ status: "success", data: photo });
 	} catch (err) {
 		console.error(err);
 		res.status(500).send({
@@ -95,25 +95,31 @@ export const update = async (req: Request, res: Response) => {
 
 	try {
 		const { photoId } = req.params;
-		const userId = req.user?.id;
+        const userId = req.user?.id;
+
+		if (!userId) {
+			return res.status(401).send({ status: "fail", message: "Authorization required" });
+		}
+
 		const updatedPhoto = await patchPhoto({
+			userId: Number(userId),
 			photoId: Number(photoId),
-			data: validatedData,
-		});
+            data: validatedData,
+		})
 
 		if (updatedPhoto) {
-			res.send({ Status: "Success", data: updatedPhoto });
+			res.send({ status: "success", data: updatedPhoto });
 		} else {
 			res.status(404).send({
-				Status: "Error",
-				Message: "Photo not found",
+				status: "error",
+				message: "Photo not found",
 			});
 		}
 	} catch (err) {
 		console.error(err);
 		res.status(500).send({
-			Status: "Error",
-			Message: "Failed to update photo",
+			status: "error",
+			message: "Failed to update photo",
 		});
 	}
 };

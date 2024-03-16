@@ -21,7 +21,7 @@ export const index = async (req: Request, res: Response) => {
 		}
 		const userId = req.user.id;
 		const albums = await GetAlbums(userId);
-		res.send({ Status: "Success", Data: albums });
+		res.send({ status: "success", data: albums });
 	} catch (err) {
 		console.error(err);
 		res.status(500).send({
@@ -49,7 +49,7 @@ export const show = async (req: Request, res: Response) => {
 			photos: album.photos || [],
 		};
 
-		res.send({ Status: "Success", Data: adjustedAlbum });
+		res.send({ status: "success", data: adjustedAlbum });
 	} catch (err: any) {
 		if (err.code === "P2025") {
 			res.status(404).send({
@@ -94,27 +94,35 @@ export const store = async (req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
 	const validatedData = matchedData(req) as updateAlbum;
 
-	try {
-		const { albumId } = req.params;
-		const userId = req.user?.id;
+	 try {
+        const { albumId } = req.params;
+        const userId = req.user?.id;
+
+
+		if (!userId) {
+            return res.status(401).send({ status: "fail", message: "Authorization required" });
+        }
+
 		const updatedAlbum = await patchAlbum({
-			albumId: Number(albumId),
-			data: validatedData,
-		});
+            userId: Number(userId),
+            albumId: Number(albumId),
+            data: validatedData,
+        });
+
 
 		if (updatedAlbum) {
-			res.send({ Status: "Success", data: updatedAlbum });
+			res.send({ status: "success", data: updatedAlbum });
 		} else {
 			res.status(404).send({
-				Status: "Error",
-				Message: "Album not found",
+				status: "error",
+				message: "Album not found",
 			});
 		}
 	} catch (err) {
 		console.error(err);
 		res.status(500).send({
-			Status: "Error",
-			Message: "Failed to update album",
+			status: "error",
+			message: "Failed to update album",
 		});
 	}
 };
@@ -122,23 +130,29 @@ export const update = async (req: Request, res: Response) => {
 export const addPhotoToAlbum = async (req: Request, res: Response) => {
 	const { albumId } = req.params;
 	const { id: photoId } = req.body;
+	const userId = req.user?.id;
 
 	try {
-		const addedPhoto = await photoToAlbum(Number(albumId), Number(photoId));
+
+		if (!userId) {
+            return res.status(401).send({ status: "fail", message: "Authorization required" });
+        }
+
+		const addedPhoto = await photoToAlbum(Number(userId), Number(albumId), Number(photoId));
 
 		if (addedPhoto) {
-			res.send({ Status: "Succes", data: null });
+			res.send({ status: "success", data: null });
 		} else {
 			res.status(404).send({
-				Status: "Error",
-				Message: "Album not found",
+				status: "error",
+				message: "Album not found",
 			});
 		}
 	} catch (err) {
 		console.error(err);
 		res.status(500).send({
-			Status: "Error",
-			Message: "Failed to add photo to album",
+			status: "error",
+			message: "Failed to add photo to album",
 		});
 	}
 };

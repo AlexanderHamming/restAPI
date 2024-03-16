@@ -1,4 +1,5 @@
 import { body } from "express-validator";
+import { getUserByEmail } from "../services/user_services";
 
 
 export const createUserRules = [
@@ -12,8 +13,14 @@ export const createUserRules = [
 		.notEmpty().withMessage("last name can't be empty").bail()
 		.trim().isLength({min: 3, max:191 }).withMessage("last name has to be 3-191 characters"),
 
-		body("email")
-.trim().isEmail().withMessage("email has to be a valid email").bail(),
+	body("email")
+        .trim().isEmail().withMessage("email has to be a valid email")
+        .custom(async (email) => {
+            const existingUser = await getUserByEmail(email);
+            if (existingUser) {
+                throw new Error("email is already in use");
+            }
+        }),
 
 body("password")
 .isString().withMessage("password has to be a string").bail()
@@ -35,9 +42,14 @@ export const updateUserRules = [
 		.notEmpty().withMessage("last name can't be empty").bail()
 		.trim().isLength({min: 3, max:191 }).withMessage("last name has to be 3-191 characters"),
 
-	body("email")
-		.optional()
-		.trim().isEmail().withMessage("email has to be a valid email").bail(),
+		body("email")
+        .trim().isEmail().withMessage("email has to be a valid email")
+        .custom(async (email) => {
+            const existingUser = await getUserByEmail(email);
+            if (existingUser) {
+                throw new Error("email is already in use");
+            }
+        }),
 
 	body("password")
 	.optional()

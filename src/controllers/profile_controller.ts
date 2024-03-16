@@ -13,17 +13,17 @@ export const getProfile = async (req: Request, res: Response) => {
 		}
 
 		const user = await getUserById(userId);
-		res.status(200).send({ Status: "Succes", Data: user });
+		res.status(200).send({ status: "success", data: user });
 	} catch (err: any) {
 		if (err.code === "P2025") {
 			res.status(404).send({
-				Status: "Error",
+				status: "error",
 				message: "User not found",
 			});
 		} else {
 			debug("Error för o hitta ID %d: %O', req.user?.id, err");
 			res.status(500).send({
-				Status: "Error",
+				status: "error",
 				message: "Something went wrong when querying the database",
 			});
 		}
