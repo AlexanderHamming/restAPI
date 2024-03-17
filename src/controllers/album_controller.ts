@@ -131,7 +131,7 @@ export const update = async (req: Request, res: Response) => {
 export const addPhotoToAlbum = async (req: Request, res: Response) => {
 	const { albumId } = req.params;
 	const { id: photoId } = req.body;
-	const userId = req.user?.id;
+	const userId = (req as any).user?.id;
 
 	try {
 

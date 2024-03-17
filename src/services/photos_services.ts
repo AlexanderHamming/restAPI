@@ -41,11 +41,11 @@ export const patchPhoto = async ({
         include: { user: true },
     });
 	if (!photo) {
-        throw new Error("Album not found");
+        throw new Error("photo not found");
     }
 
 	if (photo.user.id !== userId) {
-        throw new Error("You are not authorized to update this album");
+        throw new Error("You are not authorized to update this photo");
     }
 
 	return prisma.photo.update({
