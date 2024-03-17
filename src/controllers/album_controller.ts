@@ -112,21 +112,29 @@ export const update = async (req: Request, res: Response) => {
 
 
 		if (updatedAlbum) {
-			res.send({ status: "success", data: updatedAlbum });
-		} else {
-			res.status(404).send({
-				status: "error",
-				message: "Album not found",
-			});
-		}
-	} catch (err) {
-		console.error(err);
-		res.status(500).send({
-			status: "error",
-			message: "Failed to update album",
-		});
-	}
+            res.send({ status: "success", data: updatedAlbum });
+        } else {
+            res.status(404).send({
+                status: "error",
+                message: "Album not found",
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        if (err instanceof Error) {
+            if (err.message === "Album not found") {
+                res.status(404).send({ status: "error", message: err.message });
+            } else if (err.message === "You are not authorized to update this album") {
+                res.status(403).send({ status: "fail", message: err.message });
+            } else {
+                res.status(500).send({ status: "error", message: "Failed to update album" });
+            }
+        } else {
+            res.status(500).send({ status: "error", message: "An unknown error occurred" });
+        }
+    }
 };
+
 
 export const addPhotoToAlbum = async (req: Request, res: Response) => {
 	const { albumId } = req.params;
@@ -141,19 +149,23 @@ export const addPhotoToAlbum = async (req: Request, res: Response) => {
 
 		const addedPhoto = await photoToAlbum(Number(userId), Number(albumId), Number(photoId));
 
-		if (addedPhoto) {
-			res.send({ status: "success", data: null });
-		} else {
-			res.status(404).send({
-				status: "error",
-				message: "Album not found",
-			});
-		}
+        if (addedPhoto) {
+            res.send({ status: 'success', data: null });
+        } else {
+            res.status(404).send({ status: 'error', message: 'Album not found' });
+        }
 	} catch (err) {
-		console.error(err);
-		res.status(500).send({
-			status: "error",
-			message: "Failed to add photo to album",
-		});
-	}
+        console.error(err);
+        if (err instanceof Error) {
+            if (err.message === 'Album not found' || err.message === 'Photo not found or does not belong to the user') {
+                res.status(404).send({ status: 'error', message: err.message });
+            } else if (err.message === 'You are not authorized to add photos to this album') {
+                res.status(403).send({ status: 'fail', message: err.message });
+            } else {
+                res.status(500).send({ status: 'error', message: 'Failed to add photo to album' });
+            }
+        } else {
+            res.status(500).send({ status: 'error', message: 'An unknown error occurred' });
+        }
+    }
 };

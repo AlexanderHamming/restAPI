@@ -108,18 +108,23 @@ export const update = async (req: Request, res: Response) => {
 		})
 
 		if (updatedPhoto) {
-			res.send({ status: "success", data: updatedPhoto });
-		} else {
-			res.status(404).send({
-				status: "error",
-				message: "Photo not found",
-			});
-		}
-	} catch (err) {
-		console.error(err);
-		res.status(500).send({
-			status: "error",
-			message: "Failed to update photo",
-		});
-	}
+            res.send({ status: "success", data: updatedPhoto });
+        } else {
+            res.status(404).send({
+                status: "error",
+                message: "Photo not found",
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        if (err instanceof Error) {
+            if (err.message === "photo not found" || err.message === "You are not authorized to update this photo") {
+                res.status(404).send({ status: "error", message: err.message });
+            } else {
+                res.status(500).send({ status: "error", message: "Failed to update photo" });
+            }
+        } else {
+            res.status(500).send({ status: "error", message: "An unknown error occurred" });
+        }
+    }
 };
