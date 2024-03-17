@@ -119,7 +119,7 @@ export const update = async (req: Request, res: Response) => {
         console.error(err);
         if (err instanceof Error) {
             if (err.message === "photo not found" || err.message === "You are not authorized to update this photo") {
-                res.status(404).send({ status: "error", message: err.message });
+                res.status(403).send({ status: "error", message: err.message });
             } else {
                 res.status(500).send({ status: "error", message: "Failed to update photo" });
             }
