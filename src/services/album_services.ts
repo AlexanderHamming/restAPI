@@ -64,7 +64,7 @@ export const patchAlbum = async ({
 export const photoToAlbum = async (userId: number, albumId: number, photoId: number) => {
     const album = await prisma.album.findUnique({
         where: { id: albumId },
-        include: { user: true, photos: true },
+        include: { user: true,},
     });
 
     if (!album) {
@@ -75,11 +75,16 @@ export const photoToAlbum = async (userId: number, albumId: number, photoId: num
         throw new Error("You are not authorized to add photos to this album");
     }
 
-	const existingPhoto = album.photos.find(photo => photo.id === photoId && photo.userId === userId);
-    if (!existingPhoto) {
+	const userPhoto = await prisma.photo.findFirst({
+        where: {
+            id: photoId,
+            userId: userId,
+        },
+    });
+
+	if (!userPhoto) {
         throw new Error("Photo not found or does not belong to the user");
     }
-
 
     return prisma.album.update({
         where: { id: albumId },

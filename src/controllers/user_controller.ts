@@ -4,9 +4,11 @@ import { CreateUser } from "../services/user_services";
 import { createUser } from "../types/user_types";
 import bcrypt from "bcrypt";
 
+
 export const register = async (req: Request, res: Response) => {
 	try {
 		const validatedData = matchedData(req) as createUser;
+
 
 		const hashedPassword = await bcrypt.hash(validatedData.password, 10);
 
@@ -14,7 +16,9 @@ export const register = async (req: Request, res: Response) => {
 
 		const user = await CreateUser(validatedData);
 
-		res.status(201).send({ status: "success", data: user });
+		const { password, id, ...userDataShow } = user;
+
+		res.status(200).send({ status: "success", data: userDataShow});
 	} catch (err: any) {
 		res.status(500).send({
 			status: "error",
