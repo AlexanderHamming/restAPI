@@ -18,7 +18,12 @@ export const index = async (req: Request, res: Response) => {
 		const userId = req.user.id;
 		const photos = await GetPhotos(userId);
 
-		res.send({ status: "success", data: photos });
+		const photosWithoutUserId = photos.map(photo => {
+            const { userId, ...photoWithoutUserId } = photo;
+            return photoWithoutUserId;
+        });
+
+		res.send({ status: "success", data: photosWithoutUserId });
 	} catch (err) {
 		console.error(err);
 		res.status(500).send({
@@ -44,7 +49,7 @@ export const show = async (req: Request, res: Response) => {
 			id: photo.id,
 			title: photo.title,
 			url: photo.url,
-			comment: photo.title,
+			comment: photo.comment,
 		};
 
 		res.send({ status: "success", data: adjustedPhoto });

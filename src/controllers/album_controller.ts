@@ -160,7 +160,7 @@ export const addPhotoToAlbum = async (req: Request, res: Response) => {
             if (err.message === 'Album not found' || err.message === 'Photo not found or does not belong to the user') {
                 res.status(404).send({ status: 'error', message: err.message });
             } else if (err.message === 'You are not authorized to add photos to this album') {
-                res.status(403).send({ status: 'fail', message: err.message });
+                res.status(403).send({ status: 'error', message: err.message });
             } else {
                 res.status(500).send({ status: 'error', message: 'Failed to add photo to album' });
             }
